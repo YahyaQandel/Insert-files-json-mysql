@@ -12,10 +12,9 @@ class Law():
     def __init__(self, args=None):
         if args:
             self.args = args
-        cnfHndl = Configuration_Handler()
         self.session = DBConnection().session
         print self.session
-        logger_cls = '%s.%s'%(cnfHndl.get('Logging', 'logger_instance_name'),self.__class__.__name__)
+        logger_cls = '%s.%s'%(Configuration_Handler.get('Logging', 'logger_instance_name'),self.__class__.__name__)
         self.logger = logging.getLogger(logger_cls)
 
     def set_attributes(self,args):

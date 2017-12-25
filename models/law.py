@@ -6,9 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import Sequence
 
 Base = declarative_base()
-cnfHndl = Configuration_Handler()
-database_name = cnfHndl.get('DataDB', 'name')
-column_length = cnfHndl.get('DataDB', 'col_length')
+database_name = Configuration_Handler.get('DataDB', 'name')
+column_length = Configuration_Handler.get('DataDB', 'col_length')
 
 class Laws(Base):
 	__tablename__ = 'laws'

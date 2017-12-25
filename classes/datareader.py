@@ -14,8 +14,7 @@ class DataFile():
         else:
             self.folder_files = []
 
-        cnfHndl = Configuration_Handler()
-        logger_cls = '%s.%s'%(cnfHndl.get('Logging', 'logger_instance_name'),self.__class__.__name__)
+        logger_cls = '%s.%s'%(Configuration_Handler.get('Logging', 'logger_instance_name'),self.__class__.__name__)
         self.logger = logging.getLogger(logger_cls)
 
 

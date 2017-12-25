@@ -11,10 +11,9 @@ class DBConnection:
     class DBClient:
         def __init__(self):
 			Base = declarative_base()
-			cnfHndl = Configuration_Handler()
-			database_name = cnfHndl.get('DataDB', 'name')
-			username = cnfHndl.get('DataDB', 'username')
-			password = cnfHndl.get('DataDB', 'password')
+			database_name = Configuration_Handler.get('DataDB', 'name')
+			username = Configuration_Handler.get('DataDB', 'username')
+			password = Configuration_Handler.get('DataDB', 'password')
 			dbconnectionstring = 'mysql+pymysql://%s:%s@localhost/%s?charset=utf8'%(username,password,database_name)
 			engine = create_engine(dbconnectionstring)
 			Base.metadata.create_all(engine)

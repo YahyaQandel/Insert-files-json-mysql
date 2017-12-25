@@ -6,18 +6,21 @@ import json
 import logging
 import datetime
 
-cnfHndl = Configuration_Handler()
-logger_cls = cnfHndl.get('Logging', 'logger_instance_name')
-folder_path = cnfHndl.get('DATA_FILES', 'folder_path')
-
 logname = datetime.datetime.now().strftime("%Y-%m-%d")
 logname = 'logs/%s'%(logname)
-
 logging.basicConfig(filename=logname,
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
                             level=logging.DEBUG)
+
+
+
+cnfHndl = Configuration_Handler()
+logger_cls = Configuration_Handler.get('Logging', 'logger_instance_name')
+folder_path = Configuration_Handler.get('DATA_FILES', 'folder_path')
+
+
 
 datar = DataFile(folder_path)
 files =  datar.directory_files_list()
