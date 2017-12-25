@@ -11,6 +11,8 @@ logger_cls = cnfHndl.get('Logging', 'logger_instance_name')
 folder_path = cnfHndl.get('DATA_FILES', 'folder_path')
 
 logname = datetime.datetime.now().strftime("%Y-%m-%d")
+logname = 'logs/%s'%(logname)
+
 logging.basicConfig(filename=logname,
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
@@ -21,14 +23,15 @@ datar = DataFile(folder_path)
 files =  datar.directory_files_list()
 
 law = Law()
-module_logger = logging.getLogger(logger_cls)
+logger = logging.getLogger(logger_cls)
 for law_file_name in files:
 	try:
 		law_file_json = datar.read(law_file_name)
 		law.set_attributes(law_file_json)
 		new_law_obj = law.save()
 	except Exception as e:
-		print 'Invalid Json File[%s]'%(law_file_name)
+		logger_string = 'Invalid Json File[%s]'%(law_file_name)
+		logger.info(logger_string)
 
 
 

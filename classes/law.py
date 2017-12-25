@@ -1,12 +1,9 @@
 import requests
 from models.law import Laws
-from sqlalchemy.orm import sessionmaker
+
 from classes.config import Configuration_Handler
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
-from sqlalchemy import Sequence
+from classes.db import DBConnection
+
 import logging
 
 # encoding=utf8  
@@ -15,15 +12,9 @@ class Law():
     def __init__(self, args=None):
         if args:
             self.args = args
-        Base = declarative_base()
         cnfHndl = Configuration_Handler()
-        database_name = cnfHndl.get('DataDB', 'name')
-        column_length = cnfHndl.get('DataDB', 'col_length')
-        dbconnectionstring = 'mysql+pymysql://root:xwwx11@localhost/%s?charset=utf8'%(database_name)
-        engine = create_engine(dbconnectionstring)
-        Base.metadata.create_all(engine)
-        Session = sessionmaker(bind=engine)
-        self.session = Session()
+        self.session = DBConnection().session
+        print self.session
         logger_cls = '%s.%s'%(cnfHndl.get('Logging', 'logger_instance_name'),self.__class__.__name__)
         self.logger = logging.getLogger(logger_cls)
 
@@ -68,3 +59,4 @@ class Law():
                 args[key] = value.encode('utf-8')
 
         return args
+
