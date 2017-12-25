@@ -1,8 +1,7 @@
 import requests
-import ConfigParser
 from models.law import Laws
 from sqlalchemy.orm import sessionmaker
-import ConfigParser
+from classes.config import Configuration_Handler
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -17,16 +16,16 @@ class Law():
         if args:
             self.args = args
         Base = declarative_base()
-        config = ConfigParser.ConfigParser()
-        config.read('Configuration.cfg')
-        database_name = config.get('DataDB', 'name')
-        column_length = config.get('DataDB', 'col_length')
+        cnfHndl = Configuration_Handler()
+        database_name = cnfHndl.get('DataDB', 'name')
+        column_length = cnfHndl.get('DataDB', 'col_length')
         dbconnectionstring = 'mysql+pymysql://root:xwwx11@localhost/%s?charset=utf8'%(database_name)
         engine = create_engine(dbconnectionstring)
         Base.metadata.create_all(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
-        self.logger = logging.getLogger('json_script_to_mysql.Law')
+        logger_cls = '%s.%s'%(cnfHndl.get('Logging', 'logger_instance_name'),self.__class__.__name__)
+        self.logger = logging.getLogger(logger_cls)
 
     def set_attributes(self,args):
         self.args = args

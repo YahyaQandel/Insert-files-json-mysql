@@ -3,6 +3,7 @@ import os
 from os import listdir
 from os.path import isfile, join
 import logging
+from classes.config import Configuration_Handler
 
 class DataFile():
 
@@ -12,7 +13,10 @@ class DataFile():
             self.folderpath = folderpath
         else:
             self.folder_files = []
-        self.logger = logging.getLogger('json_script_to_mysql.DataFile')
+
+        cnfHndl = Configuration_Handler()
+        logger_cls = '%s.%s'%(cnfHndl.get('Logging', 'logger_instance_name'),self.__class__.__name__)
+        self.logger = logging.getLogger(logger_cls)
 
 
     def read(self,file_name):

@@ -1,17 +1,14 @@
-# from peewee import *
-import ConfigParser
+from classes.config import Configuration_Handler
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy import Sequence
 
-
 Base = declarative_base()
-config = ConfigParser.ConfigParser()
-config.read('Configuration.cfg')
-database_name = config.get('DataDB', 'name')
-column_length = config.get('DataDB', 'col_length')
+cnfHndl = Configuration_Handler()
+database_name = cnfHndl.get('DataDB', 'name')
+column_length = cnfHndl.get('DataDB', 'col_length')
 
 class Laws(Base):
 	__tablename__ = 'laws'

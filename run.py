@@ -1,14 +1,17 @@
 # #!/usr/bin/env python
-import ConfigParser
 from classes.law import Law
+from classes.config import Configuration_Handler
 from classes.datareader import DataFile
 import json
 import logging
+import datetime
 
-config = ConfigParser.ConfigParser()
-config.read('Configuration.cfg')
-folder_path = config.get('DATA_FILES', 'folder_path')
-logging.basicConfig(filename='logname',
+cnfHndl = Configuration_Handler()
+logger_cls = cnfHndl.get('Logging', 'logger_instance_name')
+folder_path = cnfHndl.get('DATA_FILES', 'folder_path')
+
+logname = datetime.datetime.now().strftime("%Y-%m-%d")
+logging.basicConfig(filename=logname,
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
@@ -18,7 +21,7 @@ datar = DataFile(folder_path)
 files =  datar.directory_files_list()
 
 law = Law()
-module_logger = logging.getLogger('json_script_to_mysql.main')
+module_logger = logging.getLogger(logger_cls)
 for law_file_name in files:
 	try:
 		law_file_json = datar.read(law_file_name)
