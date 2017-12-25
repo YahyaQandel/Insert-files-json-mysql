@@ -1,9 +1,10 @@
 import requests
 from models.law import Laws
+from models.lawTxtFile import law_txt_files
 
 from classes.config import Configuration_Handler
 from classes.db import DBConnection
-
+import enum 
 import logging
 
 # encoding=utf8  
@@ -13,7 +14,6 @@ class Law():
         if args:
             self.args = args
         self.session = DBConnection().session
-        print self.session
         logger_cls = '%s.%s'%(Configuration_Handler.get('Logging', 'logger_instance_name'),self.__class__.__name__)
         self.logger = logging.getLogger(logger_cls)
 
@@ -46,9 +46,10 @@ class Law():
             if law_obj:
                 logger_string = 'law number [%s] fetched successfully '%(self.args['number'])
                 self.logger.info(logger_string)
+                return True
+
         except Exception as e:
             self.logger.info(str(e))
-
 
     def encode_parameters(self,args):
         reload(sys)  
@@ -59,3 +60,20 @@ class Law():
 
         return args
 
+    def check_law_file_already_inserted(self,filename):
+        query_rows_count = self.session.query(law_txt_files).filter_by(filename=filename).count()
+        return True if query_rows_count>0 else False
+
+
+
+    def save_law_file(self,filename):
+        new_law_file = law_txt_files(filename=filename,status=LAW_FILE_STATUS.PROCESSED.name)
+        self.session.add(new_law_file)
+        self.session.commit()
+        self.session.flush()
+        self.session.close()
+
+
+class LAW_FILE_STATUS(enum.Enum):
+    PROCESSED = 1
+    UNPROCESSED = 0

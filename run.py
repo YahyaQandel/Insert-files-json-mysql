@@ -16,7 +16,6 @@ logging.basicConfig(filename=logname,
 
 
 
-cnfHndl = Configuration_Handler()
 logger_cls = Configuration_Handler.get('Logging', 'logger_instance_name')
 folder_path = Configuration_Handler.get('DATA_FILES', 'folder_path')
 
@@ -31,10 +30,19 @@ for law_file_name in files:
 	try:
 		law_file_json = datar.read(law_file_name)
 		law.set_attributes(law_file_json)
-		new_law_obj = law.save()
+		if law.check_law_file_already_inserted(law_file_name):
+			logger_string = 'File[%s] already inserted before !'%(law_file_name)
+			logger.info(logger_string)
+		else:
+			law.save()
+			law.save_law_file(law_file_name)
+			logger_string = 'File[%s] status swtiched to PROCESSED !'%(law_file_name)
+			logger.info(logger_string)
+
 	except Exception as e:
 		logger_string = 'Invalid Json File[%s]'%(law_file_name)
 		logger.info(logger_string)
+		print str(e)
 
 
 
