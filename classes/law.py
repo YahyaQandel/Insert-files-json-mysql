@@ -67,7 +67,7 @@ class Law():
 
 
     def save_law_file(self,filename):
-        new_law_file = law_txt_files(filename=filename,status=LAW_FILE_STATUS.PROCESSED.name)
+        new_law_file = law_txt_files(filename=filename,status=LAW_FILE_STATUS.PROCESSED.value)
         self.session.add(new_law_file)
         self.session.commit()
         self.session.flush()
