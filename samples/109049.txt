@@ -1,0 +1,2 @@
+{"id":109049,"url":"http://private.tashreaat.com/private/view_leg.aspx?id=109049&flag=1","header":"جمهورية مصر العربية","lawType":"قرار محافظ الوادى الجديد                     ","number":"45","year":"1962","title":"تعتبر المؤسسة المصرية التعاونية الاستهلاكية هى الجهة الادارية المختصة بالاشراف على القطاع التعاونى الاستهلاكى بدائرة محافظة الوادى الجديد","legalStatus":"فهرس","noPages":"1","journal":"الوقائع المصرية               ","journalNo":"89","issueType":"            ","issueDate":"12 نوفمبر 1962","startDate":"12 نوفمبر 1962","endDate":""}
+
