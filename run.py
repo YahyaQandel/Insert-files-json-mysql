@@ -5,14 +5,21 @@ from classes.datareader import DataFile
 import json
 import logging
 import datetime
+import os
 
 logname = datetime.datetime.now().strftime("%Y-%m-%d")
-logname = 'logs/%s'%(logname)
+log_folder = 'logs'
+
+if not os.path.exists(log_folder):
+    os.makedirs(log_folder)
+
+logname = '%s/%s'%(log_folder,logname)
 logging.basicConfig(filename=logname,
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
                             level=logging.DEBUG)
+
 
 
 
