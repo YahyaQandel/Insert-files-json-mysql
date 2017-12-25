@@ -1,0 +1,7 @@
+15:54:07,679 json_script_to_mysql.DataFile INFO File [109049.txt] Error : No JSON object could be decoded
+15:54:07,679 json_script_to_mysql.DataFile INFO File [109052.txt] read successfully 
+15:54:07,790 json_script_to_mysql.Law INFO law number [135] fetched successfully 
+15:54:42,762 json_script_to_mysql.DataFile INFO File [109049.txt] read successfully 
+15:54:42,874 json_script_to_mysql.Law INFO law number [45] fetched successfully 
+15:54:42,874 json_script_to_mysql.DataFile INFO File [109052.txt] read successfully 
+15:54:43,28 json_script_to_mysql.Law INFO law number [135] fetched successfully 

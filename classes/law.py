@@ -8,6 +8,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy import Sequence
+import logging
+
 # encoding=utf8  
 import sys  
 class Law():
@@ -24,7 +26,10 @@ class Law():
         Base.metadata.create_all(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
+        self.logger = logging.getLogger('json_script_to_mysql.Law')
 
+    def set_attributes(self,args):
+        self.args = args
 
     def save(self):
         try:
@@ -48,19 +53,19 @@ class Law():
             self.session.commit()
             self.session.flush()
             self.session.close()
-            return self.session.query(Laws).filter_by(number=self.args['number']).first()
+            law_obj = self.session.query(Laws).filter_by(number=self.args['number']).first()
+            if law_obj:
+                logger_string = 'law number [%s] fetched successfully '%(self.args['number'])
+                self.logger.info(logger_string)
         except Exception as e:
-            return str(e)
+            self.logger.info(str(e))
 
 
     def encode_parameters(self,args):
         reload(sys)  
         sys.setdefaultencoding('utf8')
         for key,value in args.items():
-            print key
             if isinstance(value,basestring):
                 args[key] = value.encode('utf-8')
-                print len(args[key])
-                print "%s,%s"%(key,args[key])
 
         return args
