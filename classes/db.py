@@ -12,9 +12,11 @@ class DBConnection:
         def __init__(self):
 			Base = declarative_base()
 			database_name = Configuration_Handler.get('DataDB', 'name')
+			host = Configuration_Handler.get('DataDB', 'host')
 			username = Configuration_Handler.get('DataDB', 'username')
 			password = Configuration_Handler.get('DataDB', 'password')
-			dbconnectionstring = 'mysql+pymysql://%s:%s@localhost/%s?charset=utf8'%(username,password,database_name)
+
+			dbconnectionstring = 'mysql+pymysql://%s:%s@%s/%s?charset=utf8'%(username,password,host,database_name)
 			engine = create_engine(dbconnectionstring)
 			Base.metadata.create_all(engine)
 			Session = sessionmaker(bind=engine)

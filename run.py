@@ -25,6 +25,7 @@ logging.basicConfig(filename=logname,
 
 logger_cls = Configuration_Handler.get('Logging', 'logger_instance_name')
 folder_path = Configuration_Handler.get('DATA_FILES', 'folder_path')
+processed_file_ext = Configuration_Handler.get('DATA_FILES', 'processed_file_ext')
 
 
 
@@ -43,13 +44,12 @@ for law_file_name in files:
 		else:
 			law.save()
 			law.save_law_file(law_file_name)
-			logger_string = 'File[%s] status swtiched to PROCESSED !'%(law_file_name)
-			logger.info(logger_string)
+			datar.rename(processed_file_ext)
+
 
 	except Exception as e:
-		logger_string = 'Invalid Json File[%s]'%(law_file_name)
+		logger_string = 'File [%s] Error :[%s]'%(law_file_name,str(e))
 		logger.info(logger_string)
-		print str(e)
 
 
 
