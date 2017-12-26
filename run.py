@@ -1,20 +1,12 @@
-# #!/usr/bin/env python
-from classes.law import Law
-from classes.config import Configuration_Handler
-from classes.datareader import DataFile
 from classes.main import JSONScript
-import json
-import logging
-import datetime
-import os
+from celery import Celery
+
+app = Celery()
+app.config_from_object('celery_conf')
 
 
-
-
-
-
-
-
-
-script = JSONScript()
-script.run()
+@app.task
+def init_schedule():
+	script = JSONScript()
+	script.run()
+	del script

@@ -39,7 +39,7 @@ class JSONScript:
 	def __saveFileJson(self,filename,json):
 		self.__lawObj.set_attributes(json)
 		if self.__lawObj.check_law_file_already_inserted(filename):
-			logger_string = 'File[%s] already inserted before !'%(self.__lawObj)
+			logger_string = 'File[%s] already inserted before !'%(filename)
 			self.logger.info(logger_string)
 			return False
 		else:

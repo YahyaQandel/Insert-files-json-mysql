@@ -7,9 +7,9 @@ pip install -r requirements.txt
 
 ```
 
-#### run 
+#### run celery
 
-```python
-python run.py
+``` 
+celery -A run worker -B --loglevel=info
 
 ```
