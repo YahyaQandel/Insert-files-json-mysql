@@ -11,9 +11,9 @@ class JSONScript:
 
 	def __init__(self):
 		# class attributes
-		self.folder_path = Configuration_Handler.get('DATA_FILES', 'folder_path')
-		self.logger = None
-		self.__datareaderObj = DataFile(self.folder_path)
+		self.__folder_path = Configuration_Handler.get('DATA_FILES', 'folder_path')
+		self.__logger = None
+		self.__datareaderObj = DataFile(self.__folder_path)
 		self.__lawObj =Law()
 
 
@@ -31,16 +31,17 @@ class JSONScript:
 				law_file_json = self.__datareaderObj.read(law_file_name)
 				if self.__saveFileJson(law_file_name,law_file_json):
 					self.__datareaderObj.rename(processed_file_ext)
+					self.__datareaderObj.cp_modified_law_files(law_file_name,self.__lawObj.get_attributes())
 			except Exception as e:
 				logger_string = 'File [%s] Error :[%s]'%(law_file_name,str(e))
-				self.logger.info(logger_string)
+				self.__logger.info(logger_string)
 
 
 	def __saveFileJson(self,filename,json):
 		self.__lawObj.set_attributes(json,filename)
 		if self.__lawObj.check_law_file_already_inserted(filename):
 			logger_string = 'File[%s] already inserted before !'%(filename)
-			self.logger.info(logger_string)
+			self.__logger.info(logger_string)
 			return False
 		else:
 			self.__lawObj.save()
@@ -51,18 +52,18 @@ class JSONScript:
 	def __initiateLogger(self):
 
 		# Logging configuration
-		self.logger_cls = Configuration_Handler.get('Logging', 'logger_instance_name')
-		self.log_folder = Configuration_Handler.get('Logging', 'log_folder')
+		logger_cls = Configuration_Handler.get('Logging', 'logger_instance_name')
+		log_folder = Configuration_Handler.get('Logging', 'log_folder')
 
 
 		logname = datetime.datetime.now().strftime("%Y-%m-%d")
-		if not os.path.exists(self.log_folder):
-		    os.makedirs(self.log_folder)
-		logname = '%s/%s'%(self.log_folder,logname)
+		if not os.path.exists(log_folder):
+		    os.makedirs(log_folder)
+		logname = '%s/%s'%(log_folder,logname)
 		logging.basicConfig(filename=logname,
 		                            filemode='a',
 		                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
 		                            datefmt='%H:%M:%S',
 		                            level=logging.DEBUG)
 
-		self.logger = logging.getLogger(self.logger_cls)
+		self.__logger = logging.getLogger(logger_cls)
