@@ -17,9 +17,10 @@ class Law():
         self.months_format = Configuration_Handler.get('LAW_ATTRIBUTES_SETTINGS', 'months')
         logger_cls = '%s.%s'%(Configuration_Handler.get('Logging', 'logger_instance_name'),self.__class__.__name__)
         self.logger = logging.getLogger(logger_cls)
-
-    def set_attributes(self,args):
+        self.law_id = None
+    def set_attributes(self,args,filename):
         self.args = args
+        self.law_id = filename.split('.')[0]
 
     def save(self):
         try:
@@ -28,7 +29,8 @@ class Law():
             # print self.__reformat_date(self.args['startDate'])
             # return 
             # ---------------------------------------------
-            new_law = Laws(url=self.args['url'],
+            new_law = Laws(id=self.law_id,
+                        url=self.args['url'],
                         header=self.args['header'],
                         lawType=self.args['lawType'],
                         number=self.args['number'],
@@ -91,15 +93,8 @@ class Law():
         else:
             return None
 
-
-
-
     def __getIndexFromList(self,gv_list,item):
         return [index for index in range(len(gv_list)) if gv_list[index] == item][0]
-
-
-
-
 
 
 class LAW_FILE_STATUS(enum.Enum):
