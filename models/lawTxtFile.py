@@ -1,5 +1,6 @@
 from classes.config import Configuration_Handler
-from sqlalchemy import Column, ForeignKey, Integer, String
+import datetime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -16,3 +17,4 @@ class law_txt_files(Base):
 	id = Column(Integer, primary_key=True)
 	filename = Column(String(column_length, convert_unicode=True), nullable=False)
 	status = Column(String(column_length, convert_unicode=True), nullable=False)
+	created_at = Column(DateTime, default=datetime.datetime.utcnow)
