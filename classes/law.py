@@ -1,12 +1,12 @@
 import requests
 from models.law import Laws
 from models.lawTxtFile import law_txt_files
-
+import ast
 from classes.config import Configuration_Handler
 from classes.db import DBConnection
 import enum 
 import logging
-
+from datetime import date
 # encoding=utf8  
 import sys  
 class Law():
@@ -14,6 +14,7 @@ class Law():
         if args:
             self.args = args
         self.session = DBConnection().session
+        self.months_format = Configuration_Handler.get('LAW_ATTRIBUTES_SETTINGS', 'months')
         logger_cls = '%s.%s'%(Configuration_Handler.get('Logging', 'logger_instance_name'),self.__class__.__name__)
         self.logger = logging.getLogger(logger_cls)
 
@@ -22,7 +23,11 @@ class Law():
 
     def save(self):
         try:
-            self.args = self.encode_parameters(self.args)
+            self.args = self.__encode_parameters(self.args)
+            # print self.__reformat_date(self.args['issueDate'])
+            # print self.__reformat_date(self.args['startDate'])
+            # return 
+            # ---------------------------------------------
             new_law = Laws(url=self.args['url'],
                         header=self.args['header'],
                         lawType=self.args['lawType'],
@@ -34,9 +39,9 @@ class Law():
                         journal=self.args['journal'],
                         journalNo=self.args['journalNo'],
                         issueType=self.args['issueType'],
-                        issueDate=self.args['issueDate'],
-                        startDate=self.args['startDate'],
-                        endDate=self.args['endDate']
+                        issueDate=self.__reformat_date(self.args['issueDate']),
+                        startDate=self.__reformat_date(self.args['startDate']),
+                        endDate=self.__reformat_date(self.args['endDate'])
                     )
             self.session.add(new_law)
             self.session.commit()
@@ -50,8 +55,9 @@ class Law():
 
         except Exception as e:
             self.logger.info(str(e))
+            print str(e)
 
-    def encode_parameters(self,args):
+    def __encode_parameters(self,args):
         reload(sys)  
         sys.setdefaultencoding('utf8')
         for key,value in args.items():
@@ -72,6 +78,28 @@ class Law():
         self.session.commit()
         self.session.flush()
         self.session.close()
+
+
+
+    def __reformat_date(self,old_date):
+        if old_date:
+            months = ast.literal_eval(self.months_format)
+            current_array_splitted = old_date.split(' ')
+            return date(int(current_array_splitted[2]),
+                        self.__getIndexFromList(months,current_array_splitted[1]),
+                        int(current_array_splitted[0]))
+        else:
+            return None
+
+
+
+
+    def __getIndexFromList(self,gv_list,item):
+        return [index for index in range(len(gv_list)) if gv_list[index] == item][0]
+
+
+
+
 
 
 class LAW_FILE_STATUS(enum.Enum):

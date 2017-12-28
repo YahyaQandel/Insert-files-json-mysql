@@ -1,9 +1,12 @@
 from classes.config import Configuration_Handler
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy import Sequence
+from sqlalchemy.sql import func
+import datetime
+import time
 
 Base = declarative_base()
 database_name = Configuration_Handler.get('DataDB', 'name')
@@ -23,7 +26,7 @@ class Laws(Base):
 	journal = Column(String(column_length, convert_unicode=True), nullable=False)
 	journalNo = Column(Integer, nullable=False)
 	issueType = Column(String(column_length, convert_unicode=True), nullable=False)
-	issueDate = Column(String(column_length, convert_unicode=True), nullable=False)
-	startDate = Column(String(column_length, convert_unicode=True), nullable=False)
-	endDate = Column(String(column_length, convert_unicode=True), nullable=False)
+	issueDate = Column(DateTime(timezone=True), nullable=False)
+	startDate = Column(DateTime(timezone=True), nullable=False)
+	endDate = Column(DateTime(timezone=True))
 
